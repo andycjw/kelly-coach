@@ -163,13 +163,13 @@ const K = (() => {
     { id: 'invest', e: '📈', name: 'Investments', blurb: 'Win some, lose some' },
     { id: 'half', e: '🧯', name: 'Half Kelly', blurb: 'Bet safer when unsure' },
   ];
-  const GAP_HINT = '<b>Gap rule:</b> odds\' chance = 1 ÷ (payout + 1). Kelly = (your chance − odds\' chance) ÷ (1 − odds\' chance).';
+  const GAP_HINT = '<b>Gap rule:</b> pays B to 1 → odds\' chance = 1 ÷ (B + 1) — win once every B+1 bets and you just break even. Kelly = (your chance − odds\' chance) ÷ (1 − odds\' chance).';
   const HINTS = {
     coin: 'Even money means the odds say 50%. Kelly = gap ÷ 0.5 = <b>2 × (your chance − 50%)</b>. No gap → bet nothing.',
     gap: 'Kelly = <b>(your chance − market chance) ÷ (1 − market chance)</b>.',
     odds: GAP_HINT,
     dice: 'First: your chance = winning outcomes ÷ all outcomes. Then ' + GAP_HINT,
-    sports: 'Odds\' chance = 1 ÷ decimal odds (+150 → 1 ÷ 2.5, −200 → 200 ÷ 300). Then Kelly = gap ÷ (1 − odds\' chance).',
+    sports: 'Odds\' chance = 1 ÷ decimal odds (+150 → 1 ÷ 2.5, −200 → 200 ÷ 300) — the win rate you\'d need just to break even. Then Kelly = gap ÷ (1 − odds\' chance).',
     invest: 'Here you only lose part of your money, so use: Kelly = <b>win% ÷ loss size − lose% ÷ gain size</b>.',
     half: 'Work out normal Kelly with the gap rule, then cut it in half.',
   };
@@ -177,7 +177,9 @@ const K = (() => {
   const payLabel = b => `<b>${num(b)} to 1</b> (win $${num(b)} per $1 risked)`;
   const gapSteps = (p, b, oddsText) => {
     const pi = implied(b), gap = p - pi;
-    const s = [oddsText || `Odds' chance = 1 ÷ (${num(b)} + 1) = <b>${P(pi)}</b>`,
+    const s = [oddsText || (b >= 1
+      ? `Pays ${num(b)} to 1 → risk $1 to win $${num(b)}. Win once every ${num(b + 1)} bets and you just break even → odds' chance = 1 ÷ ${num(b + 1)} = <b>${P(pi)}</b>`
+      : `Pays ${num(b)} to 1 → risk $1 to win only $${num(b)}. You'd have to win ${P(pi)} of the time just to break even → odds' chance = 1 ÷ ${num(b + 1)} = <b>${P(pi)}</b>`),
       `Gap = your ${P(p)} − odds' ${P(pi)} = <b>${P(gap)}</b>`];
     if (gap <= 1e-9) s.push('No gap (or negative) → you lose money on average. <b>Bet nothing.</b>');
     else s.push(`Kelly = gap ÷ (1 − odds' chance) = ${P(gap)} ÷ ${P(1 - pi)} = <b>${P(gap / (1 - pi))}</b>`);
@@ -260,7 +262,7 @@ const K = (() => {
       if (b <= 0 || !ok(kelly(p, b, 1), trap)) return null;
       const who = pick(['The Hawks', 'Team Red', 'The underdog boxer', 'Your local team', 'The home side', 'The tennis veteran']);
       const prompt = `${who} are at <b>${disp}</b> (${kind} odds). You think they win <b>${P(p)}</b> of the time.`;
-      return { p, g: b, l: 1, prompt, steps: gapSteps(p, b, conv) };
+      return { p, g: b, l: 1, prompt, steps: gapSteps(p, b, conv + ' — win this often just to break even') };
     },
     invest(o) {
       const trap = !o.noTrap && R() < 0.12;
@@ -662,7 +664,7 @@ function renderLearn() {
     <div class="card"><h3>The idea</h3><p>Kelly tells you <b>what share of your money to bet</b> so it grows as fast as possible over many bets — without ever going broke.</p>
       <p>Bet too little → slow growth. Bet too much → the losses hurt more than the wins help, and you can shrink even with an edge.</p></div>
     <div class="card"><h3>⭐ The gap rule (fast mental math)</h3>
-      <p><span class="tipnum">1</span>Find the chance the <b>odds</b> imply: 1 ÷ decimal odds. (Pays 3 to 1 → 1 ÷ 4 = 25%.)</p>
+      <p><span class="tipnum">1</span>Find the chance the <b>odds</b> imply: 1 ÷ decimal odds. (Pays 3 to 1 → risk $1 to win $3, so 1 win in 4 breaks even → 1 ÷ 4 = 25%.)</p>
       <p><span class="tipnum">2</span>Find the <b>gap</b>: your chance − odds' chance.</p>
       <p><span class="tipnum">3</span><b>Kelly = gap ÷ (1 − odds' chance)</b></p>
       <div class="ex">Odds say 25%, you think 35% → gap 10% ÷ 0.75 = <b>13.3%</b></div>

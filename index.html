@@ -559,7 +559,7 @@ function scaleBar(f, t) {
 function feedback() {
   const sc = run.sc, fb = run.fb, f = run.f / 100;
   const out = fb.out ? `<div class="outcome ${fb.out.won ? 'win' : 'lose'}">${fb.out.won ? '✅ It won!' : '❌ It lost.'} ${fb.out.stake < 0.5 ? 'You sat out.' : (fb.out.delta >= 0 ? '+' : '') + money(fb.out.delta)}</div>` : '';
-  const chart = sc.cat === 'half' ? '' : chartHtml(sc, f);
+  const chart = chartHtml(sc, f);
   return `<div class="card fbcard">${out}
     <div class="rate r-${fb.r}">${fb.tooSlow ? '⏰ Too slow' : fb.r}</div>
     <div style="text-align:center" class="muted">Score <b style="color:var(--text)">${fb.s}</b> · +${fb.xp} XP${run.streak >= 3 ? ` · 🔥 ${run.streak} streak` : ''}</div>
@@ -573,7 +573,7 @@ function chartHtml(sc, f) {
   const k = sc.kelly, gk = K.growth(k, sc.p, sc.g, sc.l);
   const N = sc.target === 0 ? 100 : Math.round(K.clamp(Math.log(10) / gk, 20, 300));
   const lines = [];
-  if (sc.target === 0) lines.push(['No bet', 0, 'var(--green)']); else lines.push(['Kelly', k, 'var(--green)'], ['2× Kelly', Math.min(1, 2 * k), 'var(--red)']);
+  if (sc.target === 0) lines.push(['No bet', 0, 'var(--green)']); else lines.push(['Kelly', k, 'var(--green)'], ['½ Kelly', k / 2, 'var(--gold)'], ['2× Kelly', Math.min(1, 2 * k), 'var(--red)']);
   lines.push(['You', f, 'var(--blue)']);
   const vals = lines.map(([n, x, col]) => { const g = K.growth(x, sc.p, sc.g, sc.l); return { n, col, g, end: 1000 * Math.exp(N * Math.max(g, -50 / N)) }; });
   const ymax = Math.max(...vals.map(v => v.end), 1500), W = 300, H = 130;

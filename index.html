@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kelly Coach">
+<title>Kelly Coach — train your bet-sizing instinct</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b1220'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle'%3E%F0%9F%8E%AF%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230b1220'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle'%3E%F0%9F%8E%AF%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0b1220;--card:#151f33;--card2:#1c2942;--line:#2a3a5a;--text:#e8eefc;--muted:#93a3c4;
+  --green:#22c55e;--gold:#fbbf24;--blue:#38bdf8;--red:#f87171;--purple:#a78bfa;
+  --radius:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45}
+body{min-height:100vh;min-height:100dvh}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+#app{max-width:560px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom));min-height:100dvh}
+@media (min-width:900px){#app.wide{max-width:980px}}
+h1,h2,h3{margin:0 0 8px;line-height:1.2}
+h1{font-size:1.5rem}h2{font-size:1.2rem}h3{font-size:1rem}
+.muted{color:var(--muted)}.small{font-size:.85rem}.tiny{font-size:.75rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.wrap{flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 16px;border-radius:14px;font-weight:700;font-size:1.05rem;background:var(--green);color:#052e16;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card2);color:var(--text);border:1px solid var(--line)}
+.btn.gold{background:var(--gold);color:#3b2600}
+.btn.sm{padding:10px 12px;font-size:.95rem;width:auto}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--card2);border:1px solid var(--line);font-size:.85rem;font-weight:600}
+.bar{height:10px;border-radius:99px;background:var(--card2);overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px;transition:width .4s}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.logo{font-weight:800;font-size:1.25rem;letter-spacing:.2px}
+.logo span{color:var(--gold)}
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:10}
+nav.tabs .in{display:flex;width:100%;max-width:560px}
+nav.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.75rem;color:var(--muted);font-weight:600;border-radius:12px}
+nav.tabs button b{font-size:1.35rem;line-height:1}
+nav.tabs button.on{color:var(--text);background:var(--card)}
+/* mode cards */
+.mode{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:16px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);margin-bottom:12px;transition:transform .08s}
+.mode:active{transform:scale(.98)}
+.mode .ic{font-size:2rem;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;flex:none}
+.mode h3{margin:0 0 2px}
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (min-width:520px){.cats{grid-template-columns:repeat(3,1fr)}}
+.cat{padding:14px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-align:left;position:relative;min-height:104px}
+.cat .e{font-size:1.6rem}
+.cat .n{font-weight:700;margin-top:4px}
+.cat .stars{font-size:.8rem;margin-top:4px;color:var(--gold);letter-spacing:1px}
+.cat.locked{opacity:.45}
+.cat.locked .lk{position:absolute;top:10px;right:10px}
+/* round */
+.scen{font-size:1.12rem}
+.scen b{color:var(--gold)}
+.warn{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:var(--gold);padding:8px 12px;border-radius:12px;margin-bottom:10px;font-size:.95rem}
+.warn b{color:#fff}
+.readout{text-align:center;margin:6px 0 2px}
+.readout .big{font-size:3rem;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.readout .sub{color:var(--muted);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin:6px 0}
+input[type=range]::-webkit-slider-runnable-track{height:12px;border-radius:99px;background:linear-gradient(90deg,var(--blue) var(--fill,0%),var(--card2) var(--fill,0%))}
+input[type=range]::-moz-range-track{height:12px;border-radius:99px;background:var(--card2)}
+input[type=range]::-moz-range-progress{height:12px;border-radius:99px;background:var(--blue)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;border-radius:50%;background:#fff;margin-top:-10px;box-shadow:0 2px 10px rgba(0,0,0,.5);border:4px solid var(--blue)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid var(--blue)}
+.steps{display:flex;gap:8px;justify-content:space-between}
+.steps button{flex:1;padding:12px 0;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-weight:700;font-variant-numeric:tabular-nums}
+.steps button:active{background:var(--line)}
+.timer{height:6px;border-radius:99px;background:var(--card2);overflow:hidden;margin-bottom:12px}
+.timer>i{display:block;height:100%;background:var(--gold);width:100%}
+.rate{font-size:2rem;font-weight:800;text-align:center}
+.r-Perfect{color:var(--gold)}.r-Great{color:var(--green)}.r-Good{color:var(--blue)}.r-Off{color:#fb923c}.r-Miss{color:var(--red)}
+.scale{position:relative;height:46px;margin:14px 4px 6px}
+.scale .track{position:absolute;left:0;right:0;top:20px;height:8px;border-radius:99px;background:var(--card2)}
+.scale .zone{position:absolute;top:20px;height:8px;background:rgba(34,197,94,.45);border-radius:99px}
+.scale .mk{position:absolute;top:0;transform:translateX(-50%);font-size:.72rem;font-weight:700;white-space:nowrap;text-align:center}
+.scale .mk:after{content:"";display:block;width:3px;height:22px;margin:2px auto 0;border-radius:2px;background:currentColor}
+.mathbox{background:var(--card2);border-radius:12px;padding:10px 12px;font-size:.92rem}
+.mathbox ol{margin:0;padding-left:20px}.mathbox li{margin:3px 0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;margin-top:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.outcome{text-align:center;font-size:1.3rem;font-weight:800;padding:10px;border-radius:12px;margin-bottom:10px}
+.outcome.win{background:rgba(34,197,94,.15);color:var(--green)}.outcome.lose{background:rgba(248,113,113,.15);color:var(--red)}
+.bots{width:100%;border-collapse:collapse;font-size:.92rem}
+.bots td{padding:6px 4px;border-top:1px solid var(--line)}
+.bots td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.bots tr.me td{color:var(--blue)}
+.stat{background:var(--card2);border-radius:14px;padding:12px;text-align:center}
+.stat .v{font-size:1.5rem;font-weight:800}
+.stat .k{font-size:.75rem;color:var(--muted)}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.badge{text-align:center;padding:10px 4px;border-radius:14px;background:var(--card2);font-size:.7rem;color:var(--muted)}
+.badge b{display:block;font-size:1.6rem;filter:grayscale(1);opacity:.35}
+.badge.got{color:var(--text)}.badge.got b{filter:none;opacity:1}
+.meter{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,#f87171,#fb923c,#fbbf24,#22c55e);margin:8px 0 4px}
+.meter .needle{position:absolute;top:-5px;width:6px;height:26px;border-radius:3px;background:#fff;transform:translateX(-50%);box-shadow:0 0 0 2px var(--bg)}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;background:var(--gold);color:#3b2600;padding:10px 16px;border-radius:14px;font-weight:800;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:pop .3s}
+@keyframes pop{from{transform:translate(-50%,-20px);opacity:0}}
+.confetti{position:fixed;top:-30px;font-size:24px;z-index:40;pointer-events:none;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.6}}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.learn p{margin:6px 0}
+.learn .ex{background:var(--card2);border-radius:12px;padding:8px 12px;margin:6px 0;font-size:.92rem}
+.tipnum{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--gold);color:#3b2600;font-weight:800;font-size:.8rem;margin-right:6px}
+svg text{fill:var(--muted);font-size:10px}
+.split{display:block}
+@media (min-width:900px){.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}}
+a{color:var(--blue)}
+.linkbtn{color:var(--muted);text-decoration:underline;font-size:.85rem}
+kbd{background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:0 5px;font-size:.75rem}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav class="tabs" id="tabs"></nav>
+<script>
+// MATH-START
+const K = (() => {
+  let R = Math.random;
+  const setRandom = fn => { R = fn; };
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const ri = (a, b) => a + Math.floor(R() * (b - a + 1));
+  const pick = a => a[Math.floor(R() * a.length)];
+  const num = (x, d = 2) => String(parseFloat(x.toFixed(d)));
+  const P = x => Math.round(x * 1000 + 1e-7) / 10 + '%';
+  const money = x => (x < 0 ? '-$' : '$') + Math.round(Math.abs(x)).toLocaleString('en-US');
+
+  // A bet pays +g per $1 staked on a win and loses l per $1 on a loss.
+  const kellyRaw = (p, g, l) => p / l - (1 - p) / g;
+  const kelly = (p, g, l) => clamp(kellyRaw(p, g, l), 0, 1);
+  // Gap rule (only for bets that lose the whole stake): implied chance = 1/(b+1); Kelly = (p - implied) / (1 - implied).
+  const implied = b => 1 / (b + 1);
+  const gapKelly = (p, b) => (p - implied(b)) / (1 - implied(b));
+  const growth = (f, p, g, l) => {
+    const down = 1 - l * f;
+    if (down <= 0) return -Infinity;
+    return p * Math.log(1 + g * f) + (1 - p) * Math.log(down);
+  };
+  const score = (f, t) => {
+    if (t < 0.005) return Math.round(100 * clamp(1 - f * 12.5, 0, 1));
+    const r = f / t;
+    return Math.round(100 * clamp(1 - (r - 1) ** 2, 0, 1));
+  };
+  const rating = s => s >= 95 ? 'Perfect' : s >= 85 ? 'Great' : s >= 70 ? 'Good' : s >= 40 ? 'Off' : 'Miss';
+
+  const CATS = [
+    { id: 'coin', e: '🪙', name: 'Lucky Coin', blurb: 'Even-money bets' },
+    { id: 'gap', e: '📊', name: 'Gap Rule', blurb: 'Market says X%, you say Y%' },
+    { id: 'odds', e: '🐎', name: 'Payout Odds', blurb: 'Bets paying more (or less) than 1:1' },
+    { id: 'dice', e: '🎲', name: 'Dice & Cards', blurb: 'Work out the chance yourself' },
+    { id: 'sports', e: '🏀', name: 'Sports Odds', blurb: 'Decimal & American odds' },
+    { id: 'invest', e: '📈', name: 'Investments', blurb: 'Win some, lose some' },
+    { id: 'half', e: '🧯', name: 'Half Kelly', blurb: 'Bet safer when unsure' },
+  ];
+  const GAP_HINT = '<b>Gap rule:</b> odds\' chance = 1 ÷ (payout + 1). Kelly = (your chance − odds\' chance) ÷ (1 − odds\' chance).';
+  const HINTS = {
+    coin: 'Even money means the odds say 50%. Kelly = gap ÷ 0.5 = <b>2 × (your chance − 50%)</b>. No gap → bet nothing.',
+    gap: 'Kelly = <b>(your chance − market chance) ÷ (1 − market chance)</b>.',
+    odds: GAP_HINT,
+    dice: 'First: your chance = winning outcomes ÷ all outcomes. Then ' + GAP_HINT,
+    sports: 'Odds\' chance = 1 ÷ decimal odds (+150 → 1 ÷ 2.5, −200 → 200 ÷ 300). Then Kelly = gap ÷ (1 − odds\' chance).',
+    invest: 'Here you only lose part of your money, so use: Kelly = <b>win% ÷ loss size − lose% ÷ gain size</b>.',
+    half: 'Work out normal Kelly with the gap rule, then cut it in half.',
+  };
+
+  const payLabel = b => `<b>${num(b)} to 1</b> (win $${num(b)} per $1 risked)`;
+  const gapSteps = (p, b, oddsText) => {
+    const pi = implied(b), gap = p - pi;
+    const s = [oddsText || `Odds' chance = 1 ÷ (${num(b)} + 1) = <b>${P(pi)}</b>`,
+      `Gap = your ${P(p)} − odds' ${P(pi)} = <b>${P(gap)}</b>`];
+    if (gap <= 1e-9) s.push('No gap (or negative) → you lose money on average. <b>Bet nothing.</b>');
+    else s.push(`Kelly = gap ÷ (1 − odds' chance) = ${P(gap)} ÷ ${P(1 - pi)} = <b>${P(gap / (1 - pi))}</b>`);
+    return s;
+  };
+  const ok = (k, trap, lo = 0.02, hi = 0.6) => trap ? k === 0 : (k >= lo && k <= hi);
+
+  const GEN = {
+    coin(o) {
+      const trap = !o.noTrap && R() < 0.12;
+      const p = trap ? ri(45, 50) / 100 : ri(52, 78) / 100;
+      const prompt = pick([
+        `A weighted coin lands <b>heads ${P(p)}</b> of the time. You bet on heads at <b>even money</b> (win $1 per $1).`,
+        `Your friend's shooter makes <b>${P(p)}</b> of free throws. A buddy offers <b>even money</b> that the next one goes in.`,
+        `A wobbly roulette wheel lands red <b>${P(p)}</b> of the time. Red pays <b>even money</b>.`,
+        `You win <b>${P(p)}</b> of your chess blitz games vs Sam. He bets <b>even money</b> on the next game.`,
+      ]);
+      return { p, g: 1, l: 1, prompt, steps: gapSteps(p, 1, 'Even money → odds\' chance = <b>50%</b>') };
+    },
+    gap(o) {
+      const trap = !o.noTrap && R() < 0.12;
+      const pi = ri(5, 85) / 100;
+      const p = trap ? pi - ri(0, 6) / 100 : pi + ri(2, 15) / 100;
+      if (p <= 0.01 || p >= 0.97) return null;
+      const b = (1 - pi) / pi;
+      if (!ok(kelly(p, b, 1), trap)) return null;
+      const c = Math.round(pi * 100);
+      const ev = pick(['it rains in Taipei tomorrow', 'the new phone launches this month', 'the challenger wins the election',
+        'the movie tops the box office', 'the startup gets acquired this year', 'the team makes the playoffs']);
+      const prompt = pick([
+        `A prediction market sells <b>YES</b> on "${ev}" for <b>${c}¢</b>, paying $1 if it happens. You think it's <b>${P(p)}</b> likely.`,
+        `The market prices "${ev}" at <b>${c}%</b>. Your research says <b>${P(p)}</b>. You can buy YES at the market price.`,
+      ]);
+      return { p, g: b, l: 1, prompt, steps: gapSteps(p, b, `Market price ${c}¢ → market chance = <b>${c}%</b>`) };
+    },
+    odds(o) {
+      const trap = !o.noTrap && R() < 0.15;
+      const b = pick([0.5, 1, 1.5, 2, 3, 4, 5, 7, 9]);
+      const fair = implied(b);
+      const p = trap ? Math.floor((fair - R() * 0.05) * 100) / 100 : Math.round((fair + 0.03 + R() * 0.15) * 100) / 100;
+      if (!ok(kelly(p, b, 1), trap)) return null;
+      const prompt = pick([
+        `A horse you've studied has a <b>${P(p)}</b> chance to win. The bookie pays ${payLabel(b)}.`,
+        `A carnival game: you win <b>${P(p)}</b> of the time and it pays ${payLabel(b)}.`,
+        `A poker side bet hits <b>${P(p)}</b> of the time and pays ${payLabel(b)}.`,
+      ]);
+      return { p, g: b, l: 1, prompt, steps: gapSteps(p, b) };
+    },
+    dice(o) {
+      const trap = !o.noTrap && R() < 0.15;
+      const [desc, n, d] = pick([
+        ['roll a 6 on one die', 1, 6], ['roll a 5 or 6 on one die', 1, 3], ['roll 3 or higher on one die', 2, 3],
+        ['draw a heart from a full deck', 1, 4], ['draw an ace from a full deck', 1, 13], ['draw a face card (J, Q, K)', 3, 13],
+        ['roll a total of 7 with two dice', 1, 6], ['roll 8 or more with two dice', 5, 12], ['roll doubles with two dice', 1, 6],
+        ['roll at least one 6 with two dice', 11, 36], ['flip two coins and get two heads', 1, 4], ['flip two coins and get at least one head', 3, 4],
+      ]);
+      const p = n / d, fair = (1 - p) / p;
+      const step = x => x < 2 ? 0.25 : x < 6 ? 0.5 : 1;
+      const b = trap ? Math.floor(fair / step(fair)) * step(fair)
+        : (x => Math.round(x / step(x)) * step(x))(fair * (1.1 + R() * 0.5));
+      if (b <= 0 || !ok(kelly(p, b, 1), trap)) return null;
+      const prompt = `You win if you <b>${desc}</b>. It pays ${payLabel(b)}.`;
+      return { p, g: b, l: 1, prompt, steps: [`Your chance = ${n}/${d} ≈ <b>${P(p)}</b>`, ...gapSteps(p, b)] };
+    },
+    sports(o) {
+      const trap = !o.noTrap && R() < 0.15;
+      const p = ri(30, 70) / 100, fair = 1 / p;
+      const dRaw = trap ? fair * (0.88 + R() * 0.12) : fair * (1.06 + R() * 0.3);
+      let b, disp, conv, kind;
+      if (R() < 0.45) {
+        kind = 'American';
+        const raw = dRaw - 1;
+        if (raw >= 1) { const A = Math.round(raw * 20) * 5; b = A / 100; disp = `+${A}`; conv = `+${A} → odds' chance = 100 ÷ (${A} + 100) = <b>${P(implied(b))}</b>`; }
+        else { const A = Math.round(100 / raw / 5) * 5; b = 100 / A; disp = `−${A}`; conv = `−${A} → odds' chance = ${A} ÷ (${A} + 100) = <b>${P(implied(b))}</b>`; }
+      } else {
+        kind = 'decimal';
+        const d = Math.round(dRaw * 20) / 20; b = d - 1; disp = d.toFixed(2);
+        conv = `Decimal ${disp} → odds' chance = 1 ÷ ${disp} = <b>${P(implied(b))}</b>`;
+      }
+      if (b <= 0 || !ok(kelly(p, b, 1), trap)) return null;
+      const who = pick(['The Hawks', 'Team Red', 'The underdog boxer', 'Your local team', 'The home side', 'The tennis veteran']);
+      const prompt = `${who} are at <b>${disp}</b> (${kind} odds). You think they win <b>${P(p)}</b> of the time.`;
+      return { p, g: b, l: 1, prompt, steps: gapSteps(p, b, conv) };
+    },
+    invest(o) {
+      const trap = !o.noTrap && R() < 0.12;
+      const p = ri(40, 70) / 100, g = pick([0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1]), l = pick([0.1, 0.2, 0.25, 0.3, 0.4, 0.5]);
+      if (!ok(kelly(p, g, l), trap, 0.05, 0.9)) return null;
+      const q = 1 - p, raw = kellyRaw(p, g, l);
+      const prompt = pick([
+        `A trade has a <b>${P(p)}</b> chance to gain <b>+${P(g)}</b>; otherwise it drops <b>−${P(l)}</b>. How much of your bankroll goes in?`,
+        `A side business: <b>${P(p)}</b> chance your money grows <b>+${P(g)}</b>, else you lose <b>−${P(l)}</b> of what you put in.`,
+        `A stock setup you trust: <b>${P(p)}</b> of the time it pops <b>+${P(g)}</b>, otherwise your stop-loss hits at <b>−${P(l)}</b>.`,
+      ]);
+      const steps = ['You only lose part of your stake here, so the gap rule doesn\'t apply.',
+        `Kelly = win% ÷ loss − lose% ÷ gain = ${num(p)} ÷ ${num(l)} − ${num(q)} ÷ ${num(g)}`,
+        `= ${num(p / l, 3)} − ${num(q / g, 3)} = <b>${P(raw)}</b>`];
+      if (raw <= 0) steps.push('Zero or negative → you lose money on average. <b>Stay out.</b>');
+      return { p, g, l, prompt, steps };
+    },
+    half() {
+      const base = make(pick(['gap', 'odds', 'dice', 'sports', 'coin']), { noTrap: true });
+      return {
+        ...base, mult: 0.5,
+        prompt: `<div class="warn">⚠️ Your estimate is shaky — use <b>half Kelly</b>.</div>${base.prompt}`,
+        steps: [...base.steps, `Half Kelly = ${P(base.kelly)} ÷ 2 = <b>${P(base.kelly / 2)}</b>`],
+      };
+    },
+  };
+
+  function make(cat, o = {}) {
+    for (let i = 0; i < 500; i++) {
+      const s = GEN[cat](o);
+      if (!s) continue;
+      const mult = s.mult || 1;
+      const k = kelly(s.p, s.g, s.l);
+      return { ...s, cat, mult, kelly: k, target: k * mult, hint: HINTS[cat] };
+    }
+    throw new Error('could not generate ' + cat);
+  }
+
+  return { clamp, kelly, kellyRaw, implied, gapKelly, growth, score, rating, make, CATS, HINTS, num, P, money, setRandom, pick };
+})();
+// MATH-END
+</script>
+<script>
+(() => {
+const { P, num, money, CATS } = K;
+const $ = s => document.querySelector(s);
+const app = $('#app'), tabs = $('#tabs');
+const STORE = 'kellycoach.v1';
+const today = () => new Date().toLocaleDateString('en-CA');
+const DAILY_GOAL = 20;
+
+function load() {
+  try { const s = JSON.parse(localStorage.getItem(STORE)); if (s && s.hist) return s; } catch (e) { /* ignore */ }
+  return { xp: 0, hist: [], days: {}, badges: [], unlockAll: false, dodged: 0, bestBank: 0 };
+}
+let S = load();
+const save = () => { if (S.hist.length > 3000) S.hist = S.hist.slice(-3000); try { localStorage.setItem(STORE, JSON.stringify(S)); } catch (e) { /* storage unavailable */ } };
+
+// ---------- stats ----------
+const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+const catHist = c => S.hist.filter(h => h.c === c);
+const lastScores = (c, n) => catHist(c).slice(-n).map(h => h.s);
+const catAvg = (c, n = 10) => avg(lastScores(c, n));
+function earnedUnlock(i) { if (i === 0) return true; const prev = CATS[i - 1].id; const sc = lastScores(prev, 5); return sc.length >= 5 && avg(sc) >= 70 && earnedUnlock(i - 1); }
+const unlocked = i => S.unlockAll || earnedUnlock(i);
+const unlockedIds = () => CATS.filter((c, i) => unlocked(i)).map(c => c.id);
+function stars(c) { const sc = lastScores(c, 10); if (sc.length < 5) return 0; const a = avg(sc); return a >= 90 ? 3 : a >= 75 ? 2 : a >= 50 ? 1 : 0; }
+const speedHist = () => S.hist.filter(h => h.m === 'speed');
+const intuition = () => { const h = speedHist().slice(-30); return h.length ? avg(h.map(x => x.s)) : null; };
+const intuitionLabel = v => v == null ? 'Not measured yet' : v >= 85 ? 'Second nature 🧠' : v >= 70 ? 'Sharp' : v >= 50 ? 'Getting there' : 'Beginner';
+function levelInfo(xp) { let lvl = 1, need = 200; while (xp >= need) { xp -= need; lvl++; need += 100; } return { lvl, cur: xp, need }; }
+const TITLES = ['Rookie', 'Punter', 'Grinder', 'Card Counter', 'Sharp', 'Pro', 'Quant', 'Fund Manager', 'Kelly Master', 'Legend'];
+const title = l => TITLES[Math.min(TITLES.length - 1, Math.floor((l - 1) / 2))];
+function dayStreak() {
+  let n = 0; const d = new Date();
+  if (!S.days[today()]) d.setDate(d.getDate() - 1);
+  while (S.days[d.toLocaleDateString('en-CA')]) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function bias(hist = S.hist) {
+  const r = hist.filter(h => h.t > 0.005).slice(-40).map(h => h.f / h.t).sort((a, b) => a - b);
+  if (r.length < 5) return null;
+  return r[Math.floor(r.length / 2)];
+}
+const biasText = b => b == null ? 'Play a few more rounds to see your habit.'
+  : b > 1.12 ? `You usually bet <b>${num(b, 1)}×</b> the ideal — you <b>over-bet</b>. That's the costly direction: shrink your gut number.`
+  : b < 0.88 ? `You usually bet <b>${num(b, 1)}×</b> the ideal — a bit <b>timid</b>. Safe, but you're leaving growth on the table.`
+  : 'Your bet sizes are <b>right on target</b> on average. 👌';
+
+const BADGES = [
+  { id: 'bull', e: '🎯', n: 'Bullseye', d: 'Score a Perfect' },
+  { id: 'fire', e: '🔥', n: 'On Fire', d: '10 Good+ in a row' },
+  { id: 'trap', e: '🪤', n: 'Trap Spotter', d: 'Skip 5 bad bets' },
+  { id: 'quick', e: '⚡', n: 'Quick Draw', d: 'Speed drill avg 90+' },
+  { id: 'surv', e: '🛟', n: 'Survivor', d: 'Finish a challenge in profit' },
+  { id: 'kate', e: '👑', n: 'Beat Kate', d: 'Out-earn Kelly Kate' },
+  { id: 'all', e: '🗺️', n: 'Explorer', d: 'Unlock every level' },
+  { id: 'brain', e: '🧠', n: 'Second Nature', d: 'Intuition 85+ (20+ drills)' },
+];
+let toastQ = [];
+function award(id) {
+  if (S.badges.includes(id)) return;
+  S.badges.push(id); const b = BADGES.find(x => x.id === id);
+  toastQ.push(`${b.e} Badge unlocked: ${b.n}`); showToasts();
+}
+function showToasts() {
+  if (document.querySelector('.toast') || !toastQ.length) return;
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = toastQ.shift();
+  document.body.appendChild(t); setTimeout(() => { t.remove(); showToasts(); }, 2200);
+}
+function confetti() {
+  const em = ['🎉', '✨', '💰', '🎯', '⭐'];
+  for (let i = 0; i < 22; i++) {
+    const c = document.createElement('div'); c.className = 'confetti'; c.textContent = em[i % em.length];
+    c.style.left = Math.random() * 100 + 'vw'; c.style.animationDelay = Math.random() * 0.4 + 's';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 2200);
+  }
+}
+const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) { /* ignore */ } };
+
+// ---------- navigation ----------
+let view = 'home', run = null, showHint = false, timerId = null;
+function go(v) { view = v; run = v === 'round' || v === 'summary' ? run : null; render(); window.scrollTo(0, 0); }
+function renderTabs() {
+  const hide = view === 'round';
+  tabs.style.display = hide ? 'none' : '';
+  const t = [['home', '🎮', 'Play'], ['progress', '📈', 'Progress'], ['learn', '📘', 'Learn']];
+  tabs.innerHTML = `<div class="in">${t.map(([id, e, n]) => `<button data-go="${id}" class="${view === id || (view === 'summary' && id === 'home') ? 'on' : ''}"><b>${e}</b>${n}</button>`).join('')}</div>`;
+}
+function render() {
+  app.classList.toggle('wide', view !== 'home' && view !== 'summary');
+  ({ home: renderHome, round: renderRound, summary: renderSummary, progress: renderProgress, learn: renderLearn })[view]();
+  renderTabs();
+}
+
+// ---------- home ----------
+function header() {
+  const L = levelInfo(S.xp);
+  return `<div class="topbar"><div class="logo">🎯 Kelly <span>Coach</span></div>
+    <div class="row"><span class="pill" title="Days in a row">🔥 ${dayStreak()}</span><span class="pill">Lv ${L.lvl}</span></div></div>`;
+}
+function renderHome() {
+  const L = levelInfo(S.xp), todayN = S.days[today()] || 0, iv = intuition();
+  const catsHtml = CATS.map((c, i) => {
+    const u = unlocked(i), st = stars(c.id);
+    const prev = CATS[i - 1];
+    return `<button class="cat ${u ? '' : 'locked'}" ${u ? `data-practice="${c.id}"` : `data-locked="${prev ? prev.name : ''}"`}>
+      ${u ? '' : '<span class="lk">🔒</span>'}<div class="e">${c.e}</div><div class="n">${c.name}</div>
+      <div class="tiny muted">${c.blurb}</div><div class="stars">${u ? '★'.repeat(st) + '☆'.repeat(3 - st) : ''}</div></button>`;
+  }).join('');
+  app.innerHTML = `${header()}
+  <div class="card">
+    <div class="row between"><div><div class="small muted">Level ${L.lvl}</div><h2 style="margin:0">${title(L.lvl)}</h2></div>
+      <div style="text-align:right"><div class="small muted">Today</div><b>${Math.min(todayN, DAILY_GOAL)}/${DAILY_GOAL}</b> <span class="small muted">rounds</span></div></div>
+    <div class="bar" style="margin-top:10px"><i style="width:${100 * L.cur / L.need}%"></i></div>
+    <div class="row between tiny muted" style="margin-top:4px"><span>${L.cur} / ${L.need} XP</span><span>${todayN >= DAILY_GOAL ? 'Daily goal done ✅' : `${DAILY_GOAL - todayN} to daily goal`}</span></div>
+  </div>
+  <div class="card">
+    <div class="row between"><h3 style="margin:0">Intuition meter</h3><span class="small muted">${intuitionLabel(iv)}</span></div>
+    <div class="meter">${iv == null ? '' : `<div class="needle" style="left:${iv}%"></div>`}</div>
+    <div class="tiny muted">Your average score in Speed Drills (last 30 answers). Goal: 85+ = second nature.</div>
+  </div>
+  <button class="mode" data-start="speed"><div class="ic" style="background:rgba(251,191,36,.15)">⚡</div>
+    <div><h3>Speed Drill</h3><div class="small muted">10 bets, 12 seconds each. No calculator — trust your gut.</div></div></button>
+  <button class="mode" data-start="challenge"><div class="ic" style="background:rgba(34,197,94,.15)">💰</div>
+    <div><h3>Bankroll Challenge</h3><div class="small muted">Start with $1,000. 12 real bets vs three rival bettors.</div></div></button>
+  <h2 style="margin-top:18px">Practice</h2>
+  <p class="small muted" style="margin-top:0">Step-by-step with hints. Average 70+ over 5 rounds to unlock the next level.</p>
+  <div class="cats">${catsHtml}
+    <button class="cat" data-practice="mix"><div class="e">🔀</div><div class="n">Mix</div><div class="tiny muted">Everything you've unlocked</div></button>
+  </div>`;
+}
+
+// ---------- rounds ----------
+function startRun(mode, cat = 'mix') {
+  run = { mode, cat, i: 0, n: mode === 'challenge' ? 12 : 10, results: [], streak: 0, bestStreak: 0, xp: 0,
+    bank: 1000, bots: { cathy: 1000, kate: 1000, rick: 1000 } };
+  showHint = false; nextRound();
+}
+function nextRound() {
+  const pool = run.cat === 'mix' ? unlockedIds() : [run.cat];
+  run.sc = K.make(K.pick(pool));
+  run.f = 0; run.touched = false; run.phase = 'bet'; run.fb = null;
+  run.bankroll = run.mode === 'challenge' ? run.bank : K.pick([500, 1000, 2000, 5000, 10000]);
+  view = 'round'; render(); window.scrollTo(0, 0);
+  if (run.mode === 'speed') startTimer();
+}
+function startTimer() {
+  clearInterval(timerId);
+  const total = 12000, t0 = Date.now();
+  timerId = setInterval(() => {
+    const left = total - (Date.now() - t0); run.tLeft = left;
+    const bar = $('.timer>i'); if (bar) { bar.style.width = Math.max(0, 100 * left / total) + '%'; bar.style.background = left < 4000 ? 'var(--red)' : 'var(--gold)'; }
+    if (left <= 0) submit(true);
+  }, 100);
+}
+function submit(timeout = false) {
+  if (run.phase !== 'bet') return;
+  clearInterval(timerId);
+  const sc = run.sc, f = run.f / 100;
+  const tooSlow = timeout && !run.touched;
+  const s = tooSlow ? 0 : K.score(f, sc.target);
+  const r = tooSlow ? 'Miss' : K.rating(s);
+  let xp = s;
+  if (run.mode === 'speed' && !tooSlow) xp += Math.round(Math.max(0, run.tLeft || 0) / 1000) * 3;
+  if (s >= 70) { run.streak++; run.bestStreak = Math.max(run.bestStreak, run.streak); xp += Math.min(run.streak, 10) * 2; } else run.streak = 0;
+  run.xp += xp; S.xp += xp;
+  S.hist.push({ d: Date.now(), c: sc.cat, m: run.mode, s, f, t: sc.target });
+  S.days[today()] = (S.days[today()] || 0) + 1;
+  if (sc.target === 0 && f === 0) { S.dodged = (S.dodged || 0) + 1; if (S.dodged >= 5) award('trap'); }
+  if (s >= 95) award('bull');
+  if (run.streak >= 10) award('fire');
+  if (CATS.every((c, i) => earnedUnlock(i))) award('all');
+  const iv = intuition(); if (iv != null && iv >= 85 && speedHist().length >= 20) award('brain');
+  let out = null;
+  if (run.mode === 'challenge') {
+    const won = Math.random() < sc.p;
+    const apply = (bank, frac) => { const st = bank * Math.min(1, frac); return bank + (won ? st * sc.g : -st * sc.l); };
+    const before = run.bank, stake = run.bank * f;
+    run.bank = apply(run.bank, f);
+    run.bots.cathy = apply(run.bots.cathy, sc.target / 4);
+    run.bots.kate = apply(run.bots.kate, sc.target);
+    run.bots.rick = apply(run.bots.rick, Math.min(1, sc.target * 3));
+    out = { won, delta: run.bank - before, stake };
+  }
+  run.results.push({ s, r, f, t: sc.target, cat: sc.cat, tooSlow });
+  run.phase = 'fb'; run.fb = { s, r, xp, tooSlow, out };
+  save(); render(); window.scrollTo(0, 0);
+  if (r === 'Perfect') { confetti(); buzz([30, 40, 30]); } else if (s < 40) { buzz(120); const c = $('.fbcard'); c && c.classList.add('shake'); } else buzz(20);
+}
+function advance() {
+  run.i++;
+  if (run.i >= run.n) {
+    clearInterval(timerId);
+    if (run.mode === 'speed' && avg(run.results.map(x => x.s)) >= 90) award('quick');
+    if (run.mode === 'challenge') {
+      if (run.bank > 1000) award('surv');
+      if (run.bank > run.bots.kate) award('kate');
+      S.bestBank = Math.max(S.bestBank || 0, run.bank);
+    }
+    save(); view = 'summary'; render(); window.scrollTo(0, 0);
+  } else nextRound();
+}
+
+function modeName(m) { return m === 'speed' ? '⚡ Speed Drill' : m === 'challenge' ? '💰 Bankroll Challenge' : '🎓 Practice'; }
+function renderRound() {
+  const sc = run.sc, c = CATS.find(x => x.id === sc.cat);
+  const top = `<div class="topbar"><button class="btn ghost sm" data-quit>✕</button>
+    <div style="text-align:center"><div class="small muted">${modeName(run.mode)}</div><b>Round ${run.i + 1} / ${run.n}</b></div>
+    <span class="pill">${run.mode === 'challenge' ? money(run.bank) : '🔥 ' + run.streak}</span></div>
+    ${run.mode === 'speed' && run.phase === 'bet' ? '<div class="timer"><i></i></div>' : ''}`;
+  const scen = `<div class="card"><div class="row between" style="margin-bottom:8px"><span class="pill">${c.e} ${c.name}</span>
+      <span class="small muted">Bankroll ${money(run.bankroll)}</span></div>
+    <div class="scen">${sc.prompt}</div>
+    <div class="small muted" style="margin-top:8px">What share of your bankroll should you bet?</div></div>`;
+  app.innerHTML = top + `<div class="split"><div>${scen}</div><div>${run.phase === 'bet' ? betPanel() : feedback()}</div></div>`;
+  if (run.phase === 'bet') syncSlider();
+}
+function betPanel() {
+  const hint = run.mode === 'practice'
+    ? (showHint ? `<div class="mathbox" style="margin-top:12px">💡 ${run.sc.hint}</div>` : `<button class="linkbtn" data-hint style="margin-top:12px">💡 Show hint</button>`) : '';
+  return `<div class="card">
+    <div class="readout"><div class="big" id="ro">0%</div><div class="sub" id="ros">$0</div></div>
+    <input type="range" id="slider" min="0" max="100" step="0.5" value="${run.f}" aria-label="Bet size percent">
+    <div class="steps"><button data-step="-5">−5</button><button data-step="-0.5">−½</button><button data-zero>Skip</button><button data-step="0.5">+½</button><button data-step="5">+5</button></div>
+    ${hint}
+    <button class="btn" data-submit style="margin-top:14px">Lock in bet</button>
+    <div class="tiny muted" style="text-align:center;margin-top:6px">"Skip" = bet nothing. Desktop: <kbd>←</kbd><kbd>→</kbd> adjust, <kbd>Enter</kbd> lock in.</div>
+  </div>`;
+}
+function syncSlider() {
+  const sl = $('#slider'); if (!sl) return;
+  sl.value = run.f; sl.style.setProperty('--fill', run.f + '%');
+  $('#ro').textContent = (run.f === 0 ? '0' : num(run.f, 1)) + '%';
+  $('#ros').textContent = run.f === 0 ? 'No bet' : `${money(run.bankroll * run.f / 100)} of ${money(run.bankroll)}`;
+}
+function setF(v) { run.f = Math.round(K.clamp(v, 0, 100) * 2) / 2; run.touched = true; syncSlider(); }
+
+function growthLine(sc, f) {
+  if (sc.target === 0) return f === 0 ? 'Correct — there was no edge. Skipping bad bets is half the game.' : 'There was no edge, so <b>any</b> bet loses money over time.';
+  if (sc.cat === 'half') return 'Half Kelly gives up a little growth (~25%) for much smaller swings — the pro move when your numbers are rough.';
+  const gk = K.growth(sc.kelly, sc.p, sc.g, sc.l), gf = K.growth(f, sc.p, sc.g, sc.l);
+  if (f === 0) return 'You skipped a good bet — 0% of the possible growth.';
+  if (gf <= 0) return `At ${P(f)} you'd <b>lose money over time</b> even though the bet is good. Over-betting is a trap!`;
+  const cap = Math.round(100 * gf / gk);
+  return `Your size captures <b>${cap}%</b> of the best possible growth rate${f > sc.kelly * 1.15 ? ', with much bigger swings' : f < sc.kelly * 0.85 ? ' (too timid)' : ''}.`;
+}
+function scaleBar(f, t) {
+  const max = Math.max(0.1, f, t * 2.2) * 1.08, pos = x => (100 * x / max);
+  const zoneLo = t === 0 ? 0 : t * 0.55, zoneHi = t === 0 ? 0.024 : t * 1.45;
+  return `<div class="scale"><div class="track"></div>
+    <div class="zone" style="left:${pos(zoneLo)}%;width:${pos(zoneHi - zoneLo)}%"></div>
+    <div class="mk" style="left:${pos(t)}%;color:var(--green)">Ideal ${P(t)}</div>
+    <div class="mk" style="left:${pos(f)}%;color:var(--blue);top:${Math.abs(pos(f) - pos(t)) < 18 ? 24 : 0}px">You ${P(f)}</div></div>`;
+}
+function feedback() {
+  const sc = run.sc, fb = run.fb, f = run.f / 100;
+  const out = fb.out ? `<div class="outcome ${fb.out.won ? 'win' : 'lose'}">${fb.out.won ? '✅ It won!' : '❌ It lost.'} ${fb.out.stake < 0.5 ? 'You sat out.' : (fb.out.delta >= 0 ? '+' : '') + money(fb.out.delta)}</div>` : '';
+  const chart = sc.cat === 'half' ? '' : chartHtml(sc, f);
+  return `<div class="card fbcard">${out}
+    <div class="rate r-${fb.r}">${fb.tooSlow ? '⏰ Too slow' : fb.r}</div>
+    <div style="text-align:center" class="muted">Score <b style="color:var(--text)">${fb.s}</b> · +${fb.xp} XP${run.streak >= 3 ? ` · 🔥 ${run.streak} streak` : ''}</div>
+    ${scaleBar(f, sc.target)}
+    <p class="small">${growthLine(sc, f)}</p>
+    <div class="mathbox"><b>How to get it</b><ol>${sc.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
+    ${chart}
+    <button class="btn" data-next style="margin-top:14px">${run.i + 1 >= run.n ? 'See results' : 'Next bet →'}</button></div>`;
+}
+function chartHtml(sc, f) {
+  const k = sc.kelly, gk = K.growth(k, sc.p, sc.g, sc.l);
+  const N = sc.target === 0 ? 100 : Math.round(K.clamp(Math.log(10) / gk, 20, 300));
+  const lines = [];
+  if (sc.target === 0) lines.push(['No bet', 0, 'var(--green)']); else lines.push(['Kelly', k, 'var(--green)'], ['2× Kelly', Math.min(1, 2 * k), 'var(--red)']);
+  lines.push(['You', f, 'var(--blue)']);
+  const vals = lines.map(([n, x, col]) => { const g = K.growth(x, sc.p, sc.g, sc.l); return { n, col, g, end: 1000 * Math.exp(N * Math.max(g, -50 / N)) }; });
+  const ymax = Math.max(...vals.map(v => v.end), 1500), W = 300, H = 130;
+  const paths = vals.map(v => {
+    const pts = []; for (let i = 0; i <= 30; i++) { const n = N * i / 30, y = 1000 * Math.exp(n * Math.max(v.g, -50 / N)); pts.push(`${(W * i / 30).toFixed(1)},${(H - H * Math.min(y, ymax) / ymax).toFixed(1)}`); }
+    return `<polyline fill="none" stroke="${v.col}" stroke-width="${v.n === 'You' ? 3 : 2}" points="${pts.join(' ')}" ${v.n === 'You' ? '' : 'stroke-dasharray="5 4"'}/>`;
+  }).join('');
+  const y0 = H - H * 1000 / ymax;
+  return `<div style="margin-top:12px"><div class="small"><b>If you made this bet ${N} times</b> <span class="muted">(typical result, from $1,000)</span></div>
+    <svg viewBox="0 0 ${W} ${H + 4}" width="100%" style="margin-top:6px"><line x1="0" x2="${W}" y1="${y0}" y2="${y0}" stroke="#2a3a5a"/>${paths}</svg>
+    <div class="legend">${vals.map(v => `<span><i style="background:${v.col}"></i>${v.n}: <b>${money(v.end)}</b></span>`).join('')}</div></div>`;
+}
+
+// ---------- summary ----------
+function renderSummary() {
+  const rs = run.results, a = Math.round(avg(rs.map(x => x.s)));
+  const counts = ['Perfect', 'Great', 'Good', 'Off', 'Miss'].map(r => [r, rs.filter(x => x.r === r).length]);
+  const b = bias(rs.map(x => ({ f: x.f, t: x.t })));
+  let extra = '';
+  if (run.mode === 'challenge') {
+    const rows = [['You', run.bank, 'me'], ['👑 Kelly Kate (bets exact Kelly)', run.bots.kate], ['🐢 Careful Cathy (¼ Kelly)', run.bots.cathy], ['🎰 Reckless Rick (3× Kelly)', run.bots.rick]]
+      .sort((x, y) => y[1] - x[1]);
+    extra = `<div class="card"><h3>Final bankrolls</h3><table class="bots">${rows.map((r, i) => `<tr class="${r[2] || ''}"><td>${i + 1}. ${r[0]}</td><td>${money(r[1])}</td></tr>`).join('')}</table>
+      <p class="tiny muted">Luck decides any 12 bets. Your <b>score</b> measures decision quality — over hundreds of bets, good sizing wins.</p></div>`;
+  }
+  app.innerHTML = `${header()}<div class="card" style="text-align:center">
+    <div class="small muted">${modeName(run.mode)} complete</div>
+    <div style="font-size:3rem;font-weight:800" class="r-${K.rating(a)}">${a}</div><div class="muted">average score · +${run.xp} XP · best streak ${run.bestStreak}</div>
+    <div class="row wrap" style="justify-content:center;margin-top:10px">${counts.filter(c => c[1]).map(([r, n]) => `<span class="pill r-${r}">${r} ×${n}</span>`).join('')}</div>
+    <div style="margin-top:10px;font-size:1.3rem;letter-spacing:2px">${rs.map(x => x.s >= 85 ? '🟩' : x.s >= 70 ? '🟦' : x.s >= 40 ? '🟧' : '🟥').join('')}</div></div>
+    ${extra}
+    <div class="card"><h3>Your habit</h3><p class="small" style="margin:0">${biasText(b)}</p></div>
+    <div class="grid2"><button class="btn" data-again>Play again</button><button class="btn ghost" data-go="home">Home</button></div>`;
+}
+
+// ---------- progress ----------
+function dailySeries() {
+  const by = {};
+  S.hist.forEach(h => { const d = new Date(h.d).toLocaleDateString('en-CA'); (by[d] = by[d] || { all: [], speed: [] }).all.push(h.s); if (h.m === 'speed') by[d].speed.push(h.s); });
+  return Object.keys(by).sort().slice(-30).map(d => ({ d, all: avg(by[d].all), speed: by[d].speed.length ? avg(by[d].speed) : null, n: by[d].all.length }));
+}
+function progressChart() {
+  const ds = dailySeries();
+  if (ds.length < 2) return '<p class="small muted">Play on at least two different days to see your trend line.</p>';
+  const W = 320, H = 140, x = i => 24 + (W - 30) * i / (ds.length - 1), y = v => H - 10 - (H - 20) * v / 100;
+  const line = (key, col) => { const pts = ds.map((p, i) => p[key] == null ? null : `${x(i).toFixed(1)},${y(p[key]).toFixed(1)}`).filter(Boolean); return pts.length > 1 ? `<polyline fill="none" stroke="${col}" stroke-width="2.5" points="${pts.join(' ')}"/>` : ''; };
+  const grid = [0, 50, 85, 100].map(v => `<line x1="24" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#2a3a5a" ${v === 85 ? 'stroke-dasharray="4 4"' : ''}/><text x="0" y="${y(v) + 3}">${v}</text>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%">${grid}${line('all', 'var(--blue)')}${line('speed', 'var(--gold)')}</svg>
+    <div class="legend"><span><i style="background:var(--blue)"></i>All rounds</span><span><i style="background:var(--gold)"></i>Speed drills</span><span class="muted">dashed = 85 (second nature)</span></div>`;
+}
+function renderProgress() {
+  const L = levelInfo(S.xp), iv = intuition(), b = bias();
+  const total = S.hist.length, last50 = S.hist.slice(-50), prev50 = S.hist.slice(-100, -50);
+  const trend = prev50.length >= 20 ? Math.round(avg(last50.map(h => h.s)) - avg(prev50.map(h => h.s))) : null;
+  const catRows = CATS.map((c, i) => {
+    const n = catHist(c.id).length, a = Math.round(catAvg(c.id));
+    return `<div style="margin:10px 0"><div class="row between small"><span>${c.e} ${c.name} ${unlocked(i) ? '' : '🔒'}</span><span class="muted">${n ? `${a} avg · ${n} played` : 'not played'}</span></div>
+      <div class="bar" style="margin-top:4px"><i style="width:${n ? a : 0}%"></i></div></div>`;
+  }).join('');
+  app.innerHTML = `${header()}<h1>Your progress</h1><div class="split"><div>
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="stat"><div class="v">${L.lvl}</div><div class="k">Level · ${title(L.lvl)}</div></div>
+      <div class="stat"><div class="v">${dayStreak()}🔥</div><div class="k">Day streak</div></div>
+      <div class="stat"><div class="v">${total}</div><div class="k">Bets sized</div></div>
+      <div class="stat"><div class="v">${trend == null ? '–' : (trend >= 0 ? '+' : '') + trend}</div><div class="k">Last 50 vs previous 50</div></div>
+    </div>
+    <div class="card"><div class="row between"><h3 style="margin:0">Intuition</h3><b>${iv == null ? '–' : Math.round(iv)}</b></div>
+      <div class="meter">${iv == null ? '' : `<div class="needle" style="left:${iv}%"></div>`}</div>
+      <div class="small muted">${intuitionLabel(iv)} — based on your last 30 Speed Drill answers.</div></div>
+    <div class="card"><h3>Score trend (daily average)</h3>${progressChart()}</div>
+    <div class="card"><h3>Your habit</h3><p class="small" style="margin:0">${biasText(b)}</p></div>
+  </div><div>
+    <div class="card"><h3>Mastery by level</h3>${catRows}</div>
+    <div class="card"><h3>Badges</h3><div class="badges">${BADGES.map(x => `<div class="badge ${S.badges.includes(x.id) ? 'got' : ''}" title="${x.d}"><b>${x.e}</b>${x.n}<div class="tiny muted">${x.d}</div></div>`).join('')}</div></div>
+    <div class="card"><h3>Settings</h3>
+      <label class="row small" style="margin-bottom:12px"><input type="checkbox" data-unlockall ${S.unlockAll ? 'checked' : ''}> Unlock all levels (skip the progression)</label>
+      <div class="small muted" style="margin-bottom:10px">Best challenge finish: <b>${S.bestBank ? money(S.bestBank) : '–'}</b>. Progress is saved in this browser only.</div>
+      <button class="btn ghost sm" data-reset>Reset all progress</button></div>
+  </div></div>`;
+}
+
+// ---------- learn ----------
+function renderLearn() {
+  const mult = [0.1, 0.2, 0.25, 1 / 3, 0.5, 2 / 3, 0.75, 0.8];
+  app.innerHTML = `${header()}<h1>How Kelly works</h1><div class="split learn"><div>
+    <div class="card"><h3>The idea</h3><p>Kelly tells you <b>what share of your money to bet</b> so it grows as fast as possible over many bets — without ever going broke.</p>
+      <p>Bet too little → slow growth. Bet too much → the losses hurt more than the wins help, and you can shrink even with an edge.</p></div>
+    <div class="card"><h3>⭐ The gap rule (fast mental math)</h3>
+      <p><span class="tipnum">1</span>Find the chance the <b>odds</b> imply: 1 ÷ decimal odds. (Pays 3 to 1 → 1 ÷ 4 = 25%.)</p>
+      <p><span class="tipnum">2</span>Find the <b>gap</b>: your chance − odds' chance.</p>
+      <p><span class="tipnum">3</span><b>Kelly = gap ÷ (1 − odds' chance)</b></p>
+      <div class="ex">Odds say 25%, you think 35% → gap 10% ÷ 0.75 = <b>13.3%</b></div>
+      <p class="small muted">Common myth: "Kelly = the gap." That's only close for long shots. For even money it's 2× the gap; for big favorites it's much more.</p>
+      <table class="bots small"><tr><td><b>Odds' chance</b></td><td><b>Bet = gap ×</b></td></tr>
+        ${mult.map(m => `<tr><td>${P(m)}</td><td>${num(1 / (1 - m), 2)}</td></tr>`).join('')}</table>
+      <p class="small muted">Memorize a few: 50% → ×2, 75% → ×4, 80% → ×5.</p></div>
+    <div class="card"><h3>Shortcuts</h3>
+      <p><b>No gap → bet nothing.</b> The most important rule.</p>
+      <p><b>Even money:</b> bet win% − lose%. (60% → 20%.)</p>
+      <p><b>Long shots</b> (odds' chance small): bet ≈ the gap. Small bets, even with a huge edge.</p>
+      <p><b>Partial losses</b> (investments): Kelly = win% ÷ loss size − lose% ÷ gain size.</p>
+      <div class="ex">60% to gain +50%, else −50%: 0.6 ÷ 0.5 − 0.4 ÷ 0.5 = <b>40%</b></div></div>
+  </div><div>
+    <div class="card"><h3>Reading odds</h3>
+      <div class="ex">Decimal <b>2.50</b> → odds' chance 1 ÷ 2.5 = 40%</div>
+      <div class="ex">American <b>+150</b> → 100 ÷ 250 = 40%</div>
+      <div class="ex">American <b>−200</b> → 200 ÷ 300 = 67%</div>
+      <div class="ex">"<b>3 to 1</b>" → 1 ÷ (3 + 1) = 25%</div>
+      <div class="ex">Market price <b>40¢</b> for $1 → 40%</div></div>
+    <div class="card"><h3>Too much is worse than too little</h3>
+      <p>Betting <b>2× Kelly</b> gives about <b>zero</b> growth. More than that and you shrink, even with an edge.</p>
+      <p><b>Half Kelly</b> keeps ~75% of the growth with far smaller swings — pros use it when their estimate might be off.</p></div>
+    <div class="card"><h3>🧪 Feel it</h3>
+      <div class="small">Your chance: <b id="sb-p">55%</b></div><input type="range" id="sb-pr" min="1" max="99" value="55">
+      <div class="small">Odds' chance: <b id="sb-q">50%</b></div><input type="range" id="sb-qr" min="1" max="99" value="50">
+      <div id="sb-out"></div></div>
+  </div></div>`;
+  sandbox();
+}
+function sandbox() {
+  const p = +$('#sb-pr').value / 100, pi = +$('#sb-qr').value / 100, b = (1 - pi) / pi, k = K.kelly(p, b, 1);
+  $('#sb-p').textContent = P(p); $('#sb-q').textContent = P(pi);
+  const fmax = Math.max(0.1, Math.min(1, k * 3)), W = 300, H = 110;
+  const gs = []; for (let i = 0; i <= 60; i++) { const f = fmax * i / 60; gs.push([f, K.growth(f, p, b, 1)]); }
+  const gmax = Math.max(1e-4, ...gs.map(x => x[1])), gmin = Math.min(-gmax, ...gs.map(x => Math.max(x[1], -gmax * 1.5)));
+  const y = g => 8 + (H - 16) * (gmax - Math.max(g, gmin)) / (gmax - gmin);
+  const pts = gs.map(([f, g]) => `${(W * f / fmax).toFixed(1)},${y(g).toFixed(1)}`).join(' ');
+  $('#sb-out').innerHTML = `<div class="ex">${k > 0 ? `Gap ${P(p - pi)} ÷ ${P(1 - pi)} → Kelly <b>${P(k)}</b>` : 'No gap → <b>bet nothing</b>'}</div>
+    <svg viewBox="0 0 ${W} ${H}" width="100%"><line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="#2a3a5a"/>
+    <polyline fill="none" stroke="var(--blue)" stroke-width="2.5" points="${pts}"/>
+    ${k > 0 ? `<line x1="${W * k / fmax}" x2="${W * k / fmax}" y1="0" y2="${H}" stroke="var(--green)" stroke-dasharray="4 3"/>` : ''}
+    <text x="2" y="${H - 2}">0%</text><text x="${W - 30}" y="${H - 2}">${P(fmax)}</text></svg>
+    <div class="tiny muted">Growth (up = better) vs bet size. Peak = Kelly (green). Where it dips below the line, you lose money over time.</div>`;
+}
+
+// ---------- events ----------
+document.addEventListener('click', e => {
+  const t = e.target.closest('button, [data-unlockall]'); if (!t) return;
+  const d = t.dataset;
+  if (d.go) go(d.go);
+  else if (d.start) startRun(d.start);
+  else if (d.practice) startRun('practice', d.practice);
+  else if (d.locked !== undefined) { toastQ.push(`🔒 Average 70+ over 5 rounds of ${d.locked} first`); showToasts(); }
+  else if (d.step) setF(run.f + +d.step);
+  else if (d.zero !== undefined) setF(0);
+  else if (d.hint !== undefined) { showHint = true; t.outerHTML = `<div class="mathbox" style="margin-top:12px">💡 ${run.sc.hint}</div>`; }
+  else if (d.submit !== undefined) submit();
+  else if (d.next !== undefined) { showHint = false; advance(); }
+  else if (d.again !== undefined) startRun(run.mode, run.cat);
+  else if (d.quit !== undefined) { if (confirm('Quit this session? Answers so far are saved.')) { clearInterval(timerId); go('home'); } }
+  else if (d.reset !== undefined) { if (confirm('Erase all progress, XP and badges?')) { localStorage.removeItem(STORE); S = load(); render(); } }
+});
+document.addEventListener('change', e => { if (e.target.matches('[data-unlockall]')) { S.unlockAll = e.target.checked; save(); render(); } });
+document.addEventListener('input', e => {
+  if (e.target.id === 'slider') setF(+e.target.value);
+  else if (e.target.id === 'sb-pr' || e.target.id === 'sb-qr') sandbox();
+});
+document.addEventListener('keydown', e => {
+  if (view !== 'round' || e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
+  if (run.phase === 'bet') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); setF(run.f + (e.shiftKey ? 5 : 0.5)); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); setF(run.f - (e.shiftKey ? 5 : 0.5)); }
+    else if (e.key === 'Enter') { e.preventDefault(); submit(); }
+  } else if (e.key === 'Enter') { e.preventDefault(); showHint = false; advance(); }
+});
+render();
+window.__kc = { get state() { return S; }, get run() { return run; } };
+})();
+</script>
+</body>
+</html>
